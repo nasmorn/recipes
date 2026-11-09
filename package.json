@@ -1,0 +1,14 @@
+{
+  "name": "rezepte",
+  "private": true,
+  "type": "module",
+  "description": "Romans Rezepte: Markdown-Quellen, Validator und statische Website",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "validate": "node validate.mjs -v",
+    "test": "node --test test/",
+    "build": "node build.mjs",
+    "check": "node validate.mjs && node --test test/ && node build.mjs",
+    "serve": "node build.mjs && node serve.mjs"
+  }
+}
