@@ -6,7 +6,7 @@
   "engines": { "node": ">=20" },
   "scripts": {
     "validate": "node validate.mjs -v",
-    "test": "node --test test/",
+    "test": "node --test \"test/*.test.mjs\"",
     "build": "node build.mjs",
     "check": "node validate.mjs && node --test test/ && node build.mjs",
     "serve": "node build.mjs && node serve.mjs"

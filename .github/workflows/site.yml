@@ -16,14 +16,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
       - name: Validate recipes
         run: node validate.mjs -v
       - name: Tests
-        run: node --test test/
+        run: node --test "test/*.test.mjs"
       - name: Build site
         run: node build.mjs
       - uses: actions/upload-pages-artifact@v3
