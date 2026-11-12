@@ -44,7 +44,17 @@ ${description ? `<meta name="description" content="${h(description)}">` : ''}
 </head>
 <body>
 ${body}
-<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
+<script>
+if ('serviceWorker' in navigator) {
+  // a new build took over: reload once so CSS/JS match the fresh page
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (hadController && !reloaded) { reloaded = true; location.reload(); }
+  });
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' });
+}
+</script>
 </body>
 </html>
 `;
