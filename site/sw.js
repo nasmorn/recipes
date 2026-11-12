@@ -42,6 +42,7 @@ async function cacheFirst(request) {
 }
 
 self.addEventListener('fetch', (e) => {
-  if (e.request.method !== 'GET' || new URL(e.request.url).origin !== location.origin) return;
+  const url = new URL(e.request.url);
+  if (e.request.method !== 'GET' || url.origin !== location.origin || url.pathname.endsWith('/version.json')) return;
   e.respondWith(e.request.mode === 'navigate' ? networkFirst(e.request) : cacheFirst(e.request));
 });

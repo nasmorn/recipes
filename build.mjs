@@ -12,6 +12,19 @@ const src = join(root, 'rezepte');
 const out = join(root, 'dist');
 const SITE_TITLE = 'Rezepte';
 
+// build id: hash of every input, embedded in each page and in version.json
+const BUILD = (() => {
+  const hash = createHash('sha256');
+  const add = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) add(p); else hash.update(p.slice(root.length)).update(readFileSync(p));
+    }
+  };
+  add(join(root, 'rezepte')); add(join(root, 'site')); hash.update(readFileSync(join(root, 'build.mjs')));
+  return hash.digest('hex').slice(0, 12);
+})();
+
 // ---------- load ----------
 const recipes = [];
 let failed = false;
@@ -35,6 +48,7 @@ function page({ title, body, depthPrefix = '', description = '' }) {
 <title>${h(title)}</title>
 ${description ? `<meta name="description" content="${h(description)}">` : ''}
 <meta name="theme-color" content="#b4532a">
+<meta name="build" content="${BUILD}">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -44,17 +58,7 @@ ${description ? `<meta name="description" content="${h(description)}">` : ''}
 </head>
 <body>
 ${body}
-<script>
-if ('serviceWorker' in navigator) {
-  // a new build took over: reload once so CSS/JS match the fresh page
-  const hadController = !!navigator.serviceWorker.controller;
-  let reloaded = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (hadController && !reloaded) { reloaded = true; location.reload(); }
-  });
-  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' });
-}
-</script>
+<script src="update.js"></script>
 </body>
 </html>
 `;
@@ -138,7 +142,7 @@ ${list}
 // ---------- write ----------
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
-for (const f of ['style.css', 'search.js', 'recipe.js', 'scale.js', 'fuzzy.js']) cpSync(join(root, 'site', f), join(out, f));
+for (const f of ['style.css', 'search.js', 'recipe.js', 'scale.js', 'fuzzy.js', 'update.js']) cpSync(join(root, 'site', f), join(out, f));
 cpSync(join(root, 'site', 'icons'), join(out, 'icons'), { recursive: true });
 
 const files = { 'index.html': indexPage() };
@@ -174,6 +178,7 @@ const hash = createHash('sha256');
 for (const f of all) hash.update(f).update(readFileSync(join(out, f)));
 const version = hash.digest('hex').slice(0, 12);
 const precache = ['./', ...all];
+writeFileSync(join(out, 'version.json'), JSON.stringify({ build: BUILD })); // not precached: always from the network
 writeFileSync(join(out, 'sw.js'), readFileSync(join(root, 'site', 'sw.js'), 'utf8')
   .replace('__VERSION__', version)
   .replace('__PRECACHE__', JSON.stringify(precache)));

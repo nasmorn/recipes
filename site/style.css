@@ -125,6 +125,16 @@ p, li { text-wrap: pretty; }
 .recipe section ul.ingredients { padding-left: 0; }
 .source { margin-top: 2.5rem; color: var(--muted); font-size: .85rem; overflow-wrap: anywhere; }
 
+.update-banner {
+  position: fixed; z-index: 10; left: 50%; transform: translateX(-50%);
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  width: max-content; max-width: calc(100% - 32px);
+  font: inherit; font-size: .9rem; font-weight: 600; cursor: pointer;
+  padding: .7rem 1.1rem; border: none; border-radius: 999px;
+  background: var(--accent); color: var(--accent-ink);
+  box-shadow: 0 4px 16px rgb(0 0 0 / .2);
+}
+
 @media (min-width: 720px) {
   body { font-size: 18px; }
   h1 { font-size: 2.3rem; }
