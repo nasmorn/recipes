@@ -16,4 +16,3 @@ tags: [vegan, Frühstück]
 * 100 g Sojajoghurt
 * 140 g Hafermilch
 * Zimt
-* 1 Paranuss
