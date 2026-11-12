@@ -17,7 +17,7 @@ tags: [Frühstück, Süßes, vegan]
 
 ## Zubereitung
 
-Ofen auf 150 °C Ober-/Unterhitze, Blech mit Backpapier.
+Ofen auf 160 °C Umluft, Blech mit Backpapier.
 
 Kokosöl, Sirup, Vanille und Mandelextrakt verrühren, Haferflocken, Kerne und Mandeln untermischen, bis alles glänzt. Aufs Blech streuen und 15 min backen. Trockenfrüchte darüber, weitere 15–20 min, bis die Flocken hellgolden sind.
 
